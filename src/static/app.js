@@ -20,11 +20,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const spotsLeft = details.max_participants - details.participants.length;
 
+        // Create participants list HTML
+        let participantsHTML = "<ul class='participants-list'>";
+        if (details.participants.length === 0) {
+          participantsHTML += "<li class='no-participants'>No participants yet</li>";
+        } else {
+          details.participants.forEach(email => {
+            participantsHTML += `<li class='participant-item'>${email}</li>`;
+          });
+        }
+        participantsHTML += "</ul>";
+
         activityCard.innerHTML = `
           <h4>${name}</h4>
           <p>${details.description}</p>
           <p><strong>Schedule:</strong> ${details.schedule}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
+          <div class="participants-section">
+            <strong>Participants:</strong>
+            ${participantsHTML}
+          </div>
         `;
 
         activitiesList.appendChild(activityCard);
@@ -83,4 +98,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initialize app
   fetchActivities();
+
+  // Add styles for participants section
+  const style = document.createElement('style');
+  style.textContent = `
+    .participants-section {
+      margin-top: 10px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      padding: 8px 12px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+    .participants-section strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #2d3a4a;
+      font-size: 1em;
+    }
+    .participants-list {
+      margin: 0;
+      padding-left: 18px;
+      list-style-type: disc;
+    }
+    .participant-item {
+      color: #3a5a8a;
+      font-size: 0.97em;
+      margin-bottom: 2px;
+    }
+    .no-participants {
+      color: #888;
+      font-style: italic;
+    }
+  `;
+  document.head.appendChild(style);
 });
